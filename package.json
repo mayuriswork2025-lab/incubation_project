@@ -1,0 +1,27 @@
+{
+  "name": "startup-incubator",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "dev:backend": "pnpm --filter backend dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "db:new": "supabase --workdir db migration new",
+    "db:reset": "supabase --workdir db db reset",
+    "db:push": "supabase --workdir db db push",
+    "db:diff": "supabase --workdir db db diff",
+    "db:generate": "pnpm --filter backend db:generate",
+    "db:migrate": "pnpm --filter backend db:migrate",
+    "db:seed": "pnpm --filter backend db:seed",
+    "supabase:start": "supabase --workdir db start",
+    "supabase:stop": "supabase --workdir db stop"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

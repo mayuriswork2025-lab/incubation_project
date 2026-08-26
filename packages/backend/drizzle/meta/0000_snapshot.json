@@ -1,0 +1,282 @@
+{
+  "id": "be56b1b7-3a53-4ba9-a0a3-3e8a48acfe1c",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.Milestone": {
+      "name": "Milestone",
+      "schema": "",
+      "columns": {
+        "Milestone_ID": {
+          "name": "Milestone_ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Startup_ID": {
+          "name": "Startup_ID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Milestone_Name": {
+          "name": "Milestone_Name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Due_Date": {
+          "name": "Due_Date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Completion_Date": {
+          "name": "Completion_Date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Status": {
+          "name": "Status",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Verification_Status": {
+          "name": "Verification_Status",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Mentor_Remarks": {
+          "name": "Mentor_Remarks",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Role": {
+      "name": "Role",
+      "schema": "",
+      "columns": {
+        "Role_ID": {
+          "name": "Role_ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Role_Name": {
+          "name": "Role_Name",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Startup": {
+      "name": "Startup",
+      "schema": "",
+      "columns": {
+        "Startup_ID": {
+          "name": "Startup_ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Startup_Name": {
+          "name": "Startup_Name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Domain": {
+          "name": "Domain",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Registration_Date": {
+          "name": "Registration_Date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Registration_Status": {
+          "name": "Registration_Status",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Current_Stage": {
+          "name": "Current_Stage",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Registered_By": {
+          "name": "Registered_By",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Startup_Membership": {
+      "name": "Startup_Membership",
+      "schema": "",
+      "columns": {
+        "Membership_ID": {
+          "name": "Membership_ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "User_ID": {
+          "name": "User_ID",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Startup_ID": {
+          "name": "Startup_ID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Project_Role": {
+          "name": "Project_Role",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Join_Date": {
+          "name": "Join_Date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.User": {
+      "name": "User",
+      "schema": "",
+      "columns": {
+        "User_ID": {
+          "name": "User_ID",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Role_ID": {
+          "name": "Role_ID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "First_Name": {
+          "name": "First_Name",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Last_Name": {
+          "name": "Last_Name",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Email": {
+          "name": "Email",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Phone": {
+          "name": "Phone",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Department": {
+          "name": "Department",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Registration_Date": {
+          "name": "Registration_Date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Status": {
+          "name": "Status",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
