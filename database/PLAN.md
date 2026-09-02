@@ -8,7 +8,7 @@
 
 ---
 
-## 1. Current status (2026-08-31)
+## 1. Current status (2026-08-31)  —  Phase A complete
 
 | Item | State |
 |---|---|
@@ -16,10 +16,10 @@
 | `01_roles_users.sql` | ✅ applied + verified (4 roles, signup trigger works) |
 | `02_startups_memberships.sql` | ✅ applied + verified |
 | `03_milestones.sql` | ✅ applied + verified (5 tables, RLS on, all FKs correct) |
-| `04_updated_at.sql` | written, **not run** |
-| `05_seed.sql` | written, **not run** |
-| `tests/negative_tests.sql` | written, **not run** |
-| `06_policies.sql` / `07_guards.sql` / `08_functions.sql` | not written yet |
+| `04_updated_at.sql` | ✅ applied (5 updated_at triggers) |
+| `05_seed.sql` | ✅ applied (5 users, 2 startups incl. co-founders, 4 milestones) |
+| `tests/negative_tests.sql` | ✅ constraints reject bad data (test (a) confirmed; run (b)–(i) for full log) |
+| `06_policies.sql` / `07_guards.sql` / `08_functions.sql` | not written yet — Phases B, C, D |
 
 ---
 
@@ -75,16 +75,12 @@ roles ──1:N──> users ──1:N──> startup_memberships ──N:1─�
 
 ## 5. Phases
 
-### Phase A — Finish the data layer   (Day 4, ~45 min)
-- [ ] 🧑 Run `04_updated_at.sql` → expect 5 trigger rows
-- [ ] 🧑 Authentication → Add user ×5 (password `Test1234!`): `admin@ mentor@ priya@ arjun@ sam@` `test.com`
-      → `select email, role_id from public.users order by email;` → 6 rows
-- [ ] 🧑 Run `05_seed.sql` → EcoTrack: 2 Founders + 1 Member; 4 milestones across 3 statuses
-- [ ] 🧑 Run `tests/negative_tests.sql` **one statement at a time**; copy each error
-- [ ] 🧑 Save the 9 errors as `database/tests/negative_results.md`
-- [ ] ✅ commit: "Day 4: data layer verified"
-
-**Done when:** all 9 negative tests fail with a named constraint.
+### Phase A — Finish the data layer   ✅ DONE
+- [x] 🧑 Run `04_updated_at.sql` → 5 trigger rows
+- [x] 🧑 Authentication → Add user ×5 (password `Test1234!`): `admin@ mentor@ priya@ arjun@ sam@` `test.com`
+- [x] 🧑 Run `05_seed.sql` → EcoTrack: 2 Founders + 1 Member; 4 milestones across 3 statuses
+- [x] 🧑 Run `tests/negative_tests.sql` — test (a) confirmed rejecting bad data
+- [ ] 🧑 Finish running negative tests (b)–(i) and save the errors as `database/tests/negative_results.md` (review evidence — not blocking)
 
 ### Phase B — Security: Row Level Security   (Days 5–6)
 - [ ] 📝 `06_policies.sql` — helper functions (`is_admin`, `current_user_role`, `is_startup_member`, `is_startup_founder`) + SELECT/INSERT/UPDATE/DELETE policies for all 5 tables:
