@@ -4,7 +4,7 @@
 **Branch:** `mayuri_module`   ·   **Target:** Review 2 (~1–2 weeks from 2026-08-30)
 **Stack:** Supabase (Postgres + Auth + PostgREST), migrations = numbered `.sql` files run in the SQL Editor.
 
-**Key:**  🧑 you do it in Supabase  ·  🤖 Claude provides the script  ·  ✅ commit + push
+**Key:**  🧑 run in Supabase  ·  📝 script to be written  ·  ✅ commit + push
 
 ---
 
@@ -87,7 +87,7 @@ roles ──1:N──> users ──1:N──> startup_memberships ──N:1─�
 **Done when:** all 9 negative tests fail with a named constraint.
 
 ### Phase B — Security: Row Level Security   (Days 5–6)
-- [ ] 🤖 `06_policies.sql` — helper functions (`is_admin`, `current_user_role`, `is_startup_member`, `is_startup_founder`) + SELECT/INSERT/UPDATE/DELETE policies for all 5 tables:
+- [ ] 📝 `06_policies.sql` — helper functions (`is_admin`, `current_user_role`, `is_startup_member`, `is_startup_founder`) + SELECT/INSERT/UPDATE/DELETE policies for all 5 tables:
 
       | table | SELECT | INSERT | UPDATE | DELETE |
       |-------|--------|--------|--------|--------|
@@ -98,7 +98,7 @@ roles ──1:N──> users ──1:N──> startup_memberships ──N:1─�
       | milestones | members + Admin | founders + Admin | founders / assigned Mentor / Admin | founders + Admin |
 
 - [ ] 🧑 Run it → `select tablename, policyname, cmd from pg_policies where schemaname='public' order by 1,3;` → ~18–20 rows
-- [ ] 🤖 `tests/rls_test.sql` — impersonates each user:
+- [ ] 📝 `tests/rls_test.sql` — impersonates each user:
       ```sql
       begin;
         set local request.jwt.claims = '{"sub":"<user-uuid>"}';
@@ -122,7 +122,7 @@ roles ──1:N──> users ──1:N──> startup_memberships ──N:1─�
 **Done when:** access matrix is 100% green (Rules 6, 7, 10).
 
 ### Phase C — Column guards (triggers)   (Day 7)
-- [ ] 🤖 `07_guards.sql`:
+- [ ] 📝 `07_guards.sql`:
       - `users`: block self-change of `role_id` / `status` unless Admin  → Rule 8
       - `milestones`: block non-Mentor/Admin editing `verification_status` / `mentor_remarks`  → Rule 9
       - `milestones`: block illegal status jumps (Completed → Pending)  → Rule 9
@@ -136,7 +136,7 @@ roles ──1:N──> users ──1:N──> startup_memberships ──N:1─�
 - [ ] ✅ commit
 
 ### Phase D — Business functions (RPC)   (Days 8–9)
-- [ ] 🤖 `08_functions.sql`:
+- [ ] 📝 `08_functions.sql`:
       - `create_startup_with_founder(name, domain, description)` — atomic → Rule 2
       - `add_startup_member(startup_id, user_id)` / `remove_startup_member(...)` — blocks removing last founder
       - `promote_to_founder(startup_id, user_id)`
@@ -153,9 +153,9 @@ roles ──1:N──> users ──1:N──> startup_memberships ──N:1─�
 - [ ] ✅ commit
 
 ### Phase E — Review artifacts   (Day 10)
-- [ ] 🤖 `database/ER_v2.md` — the 5 tables as built (mermaid diagram + notes)
-- [ ] 🤖 `database/TRACEABILITY.md` — section 4 of this file, finalised with evidence
-- [ ] 🤖 `database/DEMO.md` — click-by-click live demo (Priya edits milestone = works; Sam tries = blocked)
+- [ ] 📝 `database/ER_v2.md` — the 5 tables as built (mermaid diagram + notes)
+- [ ] 📝 `database/TRACEABILITY.md` — section 4 of this file, finalised with evidence
+- [ ] 📝 `database/DEMO.md` — click-by-click live demo (Priya edits milestone = works; Sam tries = blocked)
 - [ ] 🧑 Rehearse the demo 2–3 times
 - [ ] ✅ Final commit + push. Open PR: `mayuri_module` → `main`
 
@@ -169,8 +169,8 @@ roles ──1:N──> users ──1:N──> startup_memberships ──N:1─�
 5. **Migration scripts** — numbered, in order, in the repo
 
 ## 7. Session rhythm
-Pull → run the day's script(s) → run the tests → paste results to Claude → commit + push.
-If a test fails unexpectedly: stop, paste the error, don't run the next script.
+Pull → run the day's script(s) → run the tests → check every result against "expected" → commit + push.
+If a test fails unexpectedly: stop, note the error, don't run the next script.
 
 ## 8. Open (team)
 - Confirm the 5 core tables are yours alone to build.
