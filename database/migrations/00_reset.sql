@@ -1,36 +1,53 @@
 -- ============================================================================
--- 00_reset.sql   |   ⚠️  ONE-TIME, DESTRUCTIVE. Run once on a shared project.
+-- 00_reset.sql   |   ⚠️  DESTRUCTIVE. Wipes the ENTIRE public schema so the
+--                     module (and the teammate modules) rebuild from clean.
 -- ----------------------------------------------------------------------------
--- Wipes every old/duplicate table so the module can be rebuilt from a clean
--- slate. Does NOT delete login accounts (auth.users is not touched here).
--- Login accounts are cleared separately from Dashboard -> Authentication -> Users
--- (or:  delete from auth.users;).
+-- Does NOT delete login accounts. Clear those in
+--   Dashboard -> Authentication -> Users
+-- (deleting an auth user cascades its public.users profile row).
 --
--- Run order for the whole module:  00_reset -> 01 -> 02 -> 03
+-- Run order for the whole backend:
+--   00_reset -> 01 -> 02 -> 03 -> 04 -> (add 5 auth users) -> 05
+--            -> 06 -> 07 -> 08 -> 20 -> 30 -> 40
 -- Apply in: Supabase Dashboard -> SQL Editor -> paste -> Run
 -- ============================================================================
 
--- old signup automation + helper functions from earlier attempts
-drop trigger  if exists on_auth_user_created on auth.users;
-drop function if exists public.handle_new_user() cascade;
-drop function if exists public.is_admin() cascade;
+-- 1. the signup trigger (the only object this backend adds outside `public`)
+drop trigger if exists on_auth_user_created on auth.users;
 
--- old tables. "quoted" names were created with capital letters.
--- cascade also removes their foreign keys, policies and indexes.
-drop table if exists public."Milestone"           cascade;
-drop table if exists public."Startup_Membership"  cascade;
-drop table if exists public."Startup"             cascade;
-drop table if exists public."User"                cascade;
-drop table if exists public."Role"                cascade;
-drop table if exists public.milestone             cascade;
-drop table if exists public.startup_membership    cascade;
-drop table if exists public.startup               cascade;
-drop table if exists public.users                 cascade;
-drop table if exists public.role                  cascade;
-drop table if exists public.task                  cascade;
+-- 2. every table in `public`  (cascade also drops its policies, triggers, FKs,
+--    indexes and identity sequences)
+do $$
+declare r record;
+begin
+    for r in select tablename from pg_tables where schemaname = 'public'
+    loop
+        execute format('drop table if exists public.%I cascade', r.tablename);
+    end loop;
+end $$;
 
--- proof: should return ZERO rows
-select table_name
-from information_schema.tables
-where table_schema = 'public'
-order by table_name;
+-- 3. every function in `public`  (helpers, guards, RPCs, and any old leftovers)
+do $$
+declare r record;
+begin
+    for r in
+        select p.proname, pg_get_function_identity_arguments(p.oid) as args
+        from pg_proc p
+        join pg_namespace n on n.oid = p.pronamespace
+        where n.nspname = 'public'
+    loop
+        execute format('drop function if exists public.%I(%s) cascade', r.proname, r.args);
+    end loop;
+end $$;
+
+-- ----------------------------------------------------------------------------
+-- proof: BOTH must return zero rows
+-- ----------------------------------------------------------------------------
+select tablename as leftover_table
+from pg_tables where schemaname = 'public'
+order by 1;
+
+select p.proname as leftover_function
+from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+where n.nspname = 'public'
+order by 1;

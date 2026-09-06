@@ -94,7 +94,7 @@ In the Supabase Dashboard → **SQL Editor**, paste and Run **in order**:
 
 | # | File | Builds |
 |---|------|--------|
-| 00 | `migrations/00_reset.sql` | ⚠️ one-time, destructive — wipes old/duplicate tables |
+| 00 | `migrations/00_reset.sql` | ⚠️ destructive — drops **every** table + function in `public`. Also delete the auth users in Dashboard → Authentication → Users. |
 | 01 | `migrations/01_roles_users.sql` | `roles`, `users`, signup trigger |
 | 02 | `migrations/02_startups_memberships.sql` | `startups`, `startup_memberships` |
 | 03 | `migrations/03_milestones.sql` | `milestones` |

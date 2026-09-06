@@ -17,23 +17,28 @@ begin
 end;
 $$;
 
--- Attach it to all five tables.
+-- Attach it to all five tables. (drop-first so the script is safe to re-run.)
+drop trigger if exists trg_roles_updated_at on public.roles;
 create trigger trg_roles_updated_at
     before update on public.roles
     for each row execute function public.set_updated_at();
 
+drop trigger if exists trg_users_updated_at on public.users;
 create trigger trg_users_updated_at
     before update on public.users
     for each row execute function public.set_updated_at();
 
+drop trigger if exists trg_startups_updated_at on public.startups;
 create trigger trg_startups_updated_at
     before update on public.startups
     for each row execute function public.set_updated_at();
 
+drop trigger if exists trg_memberships_updated_at on public.startup_memberships;
 create trigger trg_memberships_updated_at
     before update on public.startup_memberships
     for each row execute function public.set_updated_at();
 
+drop trigger if exists trg_milestones_updated_at on public.milestones;
 create trigger trg_milestones_updated_at
     before update on public.milestones
     for each row execute function public.set_updated_at();

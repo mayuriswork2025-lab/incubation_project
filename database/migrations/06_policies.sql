@@ -70,6 +70,23 @@ $$;
 
 
 -- ----------------------------------------------------------------------------
+-- 1b. Drop any existing policies on our 5 tables, so this script is safe to
+--     re-run without 00_reset. (Postgres has no CREATE POLICY IF NOT EXISTS.)
+-- ----------------------------------------------------------------------------
+do $$
+declare r record;
+begin
+    for r in
+        select policyname, tablename from pg_policies
+        where schemaname = 'public'
+          and tablename in ('roles','users','startups','startup_memberships','milestones')
+    loop
+        execute format('drop policy if exists %I on public.%I', r.policyname, r.tablename);
+    end loop;
+end $$;
+
+
+-- ----------------------------------------------------------------------------
 -- 2. roles  — everyone signed in can read; only Admin writes
 -- ----------------------------------------------------------------------------
 create policy roles_select on public.roles

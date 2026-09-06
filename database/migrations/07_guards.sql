@@ -34,6 +34,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_users_guard_self_privilege on public.users;
 create trigger trg_users_guard_self_privilege
     before update on public.users
     for each row execute function public.guard_users_self_privilege();
@@ -62,6 +63,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_milestone_guard_verification on public.milestones;
 create trigger trg_milestone_guard_verification
     before update on public.milestones
     for each row execute function public.guard_milestone_verification();
@@ -95,6 +97,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_milestone_guard_status_flow on public.milestones;
 create trigger trg_milestone_guard_status_flow
     before update on public.milestones
     for each row execute function public.guard_milestone_status_flow();
@@ -136,6 +139,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_memberships_guard_last_founder on public.startup_memberships;
 create trigger trg_memberships_guard_last_founder
     before update or delete on public.startup_memberships
     for each row execute function public.guard_last_founder();
